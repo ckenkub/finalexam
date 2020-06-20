@@ -103,13 +103,13 @@ func CreateCustomer(customer types.Customer) (types.Customer, error) {
 }
 
 //UpdateCustomer customer.Customer
-func UpdateCustomer(customer types.Customer) error {
+func UpdateCustomer(customer types.Customer, id string) error {
 	stmt, err := Conn().Prepare("UPDATE customer SET name=$1, email=$2, status=$3 where id=$4")
 	if err != nil {
 		return fmt.Errorf("can't prepare update statement: %w", err)
 	}
 
-	if _, err := stmt.Exec(customer.Name, customer.Email, customer.Status, customer.ID); err != nil {
+	if _, err := stmt.Exec(customer.Name, customer.Email, customer.Status, id); err != nil {
 		return fmt.Errorf("can't execute update: %w", err)
 	}
 

@@ -11,6 +11,7 @@ import (
 )
 
 func updateCustomerHandler(c *gin.Context) {
+	id := c.Param("id")
 	customer := types.Customer{}
 
 	if err := c.ShouldBindJSON(&customer); err != nil {
@@ -18,7 +19,7 @@ func updateCustomerHandler(c *gin.Context) {
 		return
 	}
 
-	if err := updateCustomer(customer); err != nil {
+	if err := updateCustomer(customer, id); err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
@@ -26,8 +27,8 @@ func updateCustomerHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, customer)
 }
 
-func updateCustomer(customer types.Customer) error {
-	err := database.UpdateCustomer(customer)
+func updateCustomer(customer types.Customer, id string) error {
+	err := database.UpdateCustomer(customer, id)
 	if err != nil {
 		log.Println(err)
 		return &errors.Error{
